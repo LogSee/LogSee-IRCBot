@@ -70,13 +70,6 @@ client.on('CHANMSG', function (data) {
             });
         }
     }
-    if (data.message.match(trigger+'linecount')) {
-        if (config.Modules.LineCount) {
-            exec = require('shell-exec');
-            exec('git clone https://github.com/LogSee/LogSee && cd LogSee && git ls-files | xargs | wc -l').then(console.log).catch(console.log);
-        }
-    }
-
 });
 
 // git notification mechanism - popzi
