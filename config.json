@@ -10,6 +10,7 @@
     },
     "Modules": {
         "BOFH" : true,
-        "HttpTitleFetcher" : true
+        "HttpTitleFetcher" : true,
+        "LineCount" : true
     }
 }
