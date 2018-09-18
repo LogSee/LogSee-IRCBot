@@ -5,6 +5,7 @@
         "BotName" : "LogSeeBot",
         "RealName" : "LogSeeBot",
         "Channel" : "#logsee",
-        "GreetMsg" : "Hello, it's your friendly neighborhood bot!"
+        "GreetMsg" : "Hello, it's your friendly neighborhood bot!",
+        "TriggerChar" : "!"
     }
 }
