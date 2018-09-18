@@ -26,7 +26,7 @@ console.log("My real name is: " + fullname);
 console.log("I'm lurking in: " + chan);
 
 client.on('PRIVMSG', function (data) {
-    var message = 'Hi, ' + data.sender +', nice of you to speak to a bot. I can only repeat what you said: ' + data.message;
+    var message = 'Oh, ' + data.sender +'you tried to message me, well... I am afraid to say that I am a bot, not a sentient being. So I am just gonna do a typical bot thing and send you your message back. Here it is : ' + data.message;
     if(data.sender !== myNick) client.say(data.sender, message);
   });
 
