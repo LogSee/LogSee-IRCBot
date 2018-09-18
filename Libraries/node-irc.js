@@ -76,7 +76,7 @@
         } else {
             for (i = response.length; i--;) {
                 rawResponse = response[i].split(" ");
-                if(rawResponse[1] === '004' || rawResponse[1] === '376') { // If registration was sucessful or MOTD has been written
+                if(rawResponse[1] === '004') { // If registration was sucessful or MOTD has been written // Old buggy code - // if(rawResponse[1] === '004' || rawResponse[1] === '376') {
                     this.emit('ready');
                 } else { 
                     this.eventHandler(assembleResponse(rawResponse));
