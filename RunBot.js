@@ -4,7 +4,7 @@ var fs = require('fs');
 var config = JSON.parse(fs.readFileSync(path.join(__dirname + '/config.json'), 'utf8'));
 
 var server = config.IRC.Server,
-    port = config.IRC.port,
+    port = config.IRC.Port,
     myNick = config.IRC.BotName,
     fullname = config.IRC.RealName
     chan = config.IRC.Channel;
