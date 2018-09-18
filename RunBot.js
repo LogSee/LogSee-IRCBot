@@ -30,4 +30,11 @@ client.on('PRIVMSG', function (data) {
     if(data.sender !== myNick) client.say(data.sender, message);
   });
 
+client.on('KICK', function (data) {
+    var privMessage = 'Im sory but you seem to be some kind of an douche, ' + data.message[0] + ', or else you wouldnt have been kicked by ' + data.sender + ' on ' + data.receiver + ' because of ' + data.message[1];
+    var chanMessage = 'Sorry guys, but ' + data.message[0] + ' had to go!';
+    client.say(data.message[0], privMessage);
+    client.say(data.receiver, chanMessage);
+});
+
 client.connect();
