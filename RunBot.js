@@ -3,11 +3,12 @@ var path = require('path');
 var fs = require('fs');
 var config = JSON.parse(fs.readFileSync(path.join(__dirname + '/config.json'), 'utf8'));
 
-var server = config.IRC.Server,
-    port = config.IRC.Port,
-    myNick = config.IRC.BotName,
-    fullname = config.IRC.RealName
-    chan = config.IRC.Channel;
+var server = config.IRC.Server;
+var port = config.IRC.Port;
+var myNick = config.IRC.BotName;
+var fullname = config.IRC.RealName;
+var chan = config.IRC.Channel;
+var greetmsg = config.IRC.GreetMsg;
 
 var client = new ircClient(server, port, myNick, fullname);
 client.verbosity = 2;
@@ -15,11 +16,12 @@ client.verbosity = 2;
 
 client.on('ready', function () {
     client.join(chan);
+    client.say(chan, greetmsg)
 });
 
-console.log(server);
-console.log(port);
-console.log(myNick);
-console.log(fullname);
-console.log(chan);
+console.log("Connecting to: " + server);
+console.log("On port: " + port);
+console.log("As Nick: " + myNick);
+console.log("My real name is: " + fullname);
+console.log("I'm lurking in: " + chan);
 client.connect();
