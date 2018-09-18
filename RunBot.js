@@ -52,6 +52,8 @@ client.on('CHANMSG', function (data) {
         client.say(chan, 'pong')
     }
     //own commands in this bit, should all be represented in the config file
+
+    //bofh excuse generator
     if (data.message.match(trigger+'bofh')) {
         if (config.Modules.BOFH){
             var bofhexcuse = require('huh');
@@ -59,6 +61,7 @@ client.on('CHANMSG', function (data) {
             client.say(chan, response);
         }
     }
+    // Fetches web page title element
     if (data.message.match(httpregex)) {
         if (config.Modules.HttpTitleFetcher){
             var getTitleAtUrl = require('get-title-at-url');
@@ -67,6 +70,7 @@ client.on('CHANMSG', function (data) {
             });
         }
     }
+
 });
 
 // Connect to irc
