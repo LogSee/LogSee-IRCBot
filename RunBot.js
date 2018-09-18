@@ -1,4 +1,4 @@
-var ircClient = require('node-irc');
+var ircClient = require('.client.js');
 var path = require('path');
 var fs = require('fs');
 var config = JSON.parse(fs.readFileSync(path.join(__dirname + '/config.json'), 'utf8'));
@@ -50,7 +50,6 @@ client.on('CHANMSG', function (data) {
         client.say(chan, 'pong')
     }
 });
-
 
 // Connect to irc
   client.connect();
