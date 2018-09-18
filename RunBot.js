@@ -10,6 +10,8 @@ var fullname = config.IRC.RealName;
 var chan = config.IRC.Channel;
 var greetmsg = config.IRC.GreetMsg;
 var trigger = config.IRC.TriggerChar;
+var httpregex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
+
 
 var client = new ircClient(server, port, myNick, fullname);
 client.verbosity = 2;
@@ -17,7 +19,6 @@ client.debug = false;
 
 client.on('ready', function () {
     client.join(chan);
-    client.say(chan, greetmsg)
 });
 
 // Handy to see if the config options have been read correctly.
@@ -46,14 +47,24 @@ client.on('INVITE', function (data) {
   });
 
 client.on('CHANMSG', function (data) {
+    //pingpong will always be enabled, handy for testing
     if (data.message.match(trigger+'ping')) {
         client.say(chan, 'pong')
     }
+    //own commands in this bit, should all be represented in the config file
     if (data.message.match(trigger+'bofh')) {
         if (config.Modules.BOFH){
             var bofhexcuse = require('huh');
             var response = bofhexcuse.get('en');
             client.say(chan, response);
+        }
+    }
+    if (data.message.match(httpregex)) {
+        if (config.Modules.HttpTitleFetcher){
+            var getTitleAtUrl = require('get-title-at-url');
+            getTitleAtUrl(data.message, function(title){
+                client.say(chan,title);
+            });
         }
     }
 });

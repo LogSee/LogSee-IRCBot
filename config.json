@@ -9,6 +9,7 @@
         "TriggerChar" : "!"
     },
     "Modules": {
-        "BOFH" : true
+        "BOFH" : true,
+        "HttpTitleFetcher" : true
     }
 }
