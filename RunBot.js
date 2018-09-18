@@ -73,5 +73,9 @@ client.on('CHANMSG', function (data) {
 
 });
 
+client.on('GIT', function(data) {
+    client.say(chan, `${data.message.pusher.name} has made a commit - ${data.message.compare}`);
+});
+
 // Connect to irc
   client.connect();

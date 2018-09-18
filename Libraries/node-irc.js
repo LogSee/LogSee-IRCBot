@@ -31,15 +31,21 @@
         console.log(that.listenPort);
         http.createServer(function(req, res) {
             console.log('Got request');
-            res.writeHead(200, {'Content-Type': 'text/html'});
-            res.write('OK');
-            res.end();
 
-            console.log(req);
+            var body = "";
+            req.on('data', function(data) {
+                body += data;
+            });
+            req.on('end', function() {
+                res.writeHead(200, {'Content-Type': 'text/html'});
+                res.write('OK');
+                res.end();
 
-            let cleanData = 'eggs';
-            this.emit('GIT', cleanData);
-
+                // Was it a git message?
+                if (body.includes('git')) {
+                    that.eventHandler({"method": "GIT", "message": JSON.parse(body)});
+                };
+            });
         }).listen(that.listenPort);
         
         if(that.proxy) {
@@ -107,6 +113,7 @@
     };
 
     ircClient.prototype.eventHandler = function (data) {
+        //console.log('Event:', data.method, data);
         if (data.method === 'PRIVMSG') {
             data.message = data.message.join(" ");
             data.message = data.message.substring(1, (data.message.length-1));
@@ -116,6 +123,9 @@
                 } else {
                       this.emit('PRIVMSG', data); 
                 }
+        }
+        else if (data.method == 'GIT') {
+            this.emit('GIT', data);
         }
         else if (data.method === 'JOIN') {
             // Remove preceding semi-colon
