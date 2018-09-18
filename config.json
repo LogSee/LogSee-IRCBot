@@ -1,0 +1,10 @@
+{
+    "IRC": {
+        "Server" : "irc.freenode.net",
+        "Port" : 6667,
+        "BotName" : "LogSeeBot",
+        "RealName" : "LogSeeBot",
+        "Channel" : "#logsee",
+        "GreetMsg" : "Herro it's your friendly neighborhood bot!"
+    }
+}
