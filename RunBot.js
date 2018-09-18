@@ -1,7 +1,7 @@
-var ircClient = require('.client.js');
 var path = require('path');
 var fs = require('fs');
 var config = JSON.parse(fs.readFileSync(path.join(__dirname + '/config.json'), 'utf8'));
+var ircClient = require(path.join(__dirname + '/Libraries/node-irc.js'));
 
 var server = config.IRC.Server;
 var port = config.IRC.Port;
@@ -48,6 +48,13 @@ client.on('INVITE', function (data) {
 client.on('CHANMSG', function (data) {
     if (data.message.match(trigger+'ping')) {
         client.say(chan, 'pong')
+    }
+    if (data.message.match(trigger+'bofh')) {
+        if (config.Modules.BOFH){
+            var bofhexcuse = require('huh');
+            var response = bofhexcuse.get('en');
+            client.say(chan, response);
+        }
     }
 });
 
