@@ -2,19 +2,23 @@
 
 (function () {
     var events = require('events');
+    var http = require('http');
 
     function ircClient(server, port, nickname, fullname, password, proxy) {
         this.host = server;
         this.port = port;
         this.nickname = nickname;
         this.fullname = fullname;
-        this.verbosity = 1; // 0 => Silent, 1 => Normal, 2 => Info, 3 => Debug
+        this.verbosity = 1;             // 0 => Silent, 1 => Normal, 2 => Info, 3 => Debug
         this.debug = false;
         this.password = password;
-        this.proxy = proxy; // { host: <proxyHost>, port: <proxyPort> }
+        this.proxy = proxy;             // { host: <proxyHost>, port: <proxyPort> }
+        this.listenPort = 6699          // Port to listen for incoming data, such as git commits, custom bit by P0pzi
         events.EventEmitter.call(this);
         return this;
     }
+
+    
 
     ircClient.super_ = events.EventEmitter;
     ircClient.prototype = Object.create(events.EventEmitter.prototype);
@@ -22,6 +26,22 @@
     ircClient.prototype.connect = function () {
         var that = this;
         var client;
+
+        // Ram a http server down its throat for incoming data
+        console.log(that.listenPort);
+        http.createServer(function(req, res) {
+            console.log('Got request');
+            res.writeHead(200, {'Content-Type': 'text/html'});
+            res.write('OK');
+            res.end();
+
+            console.log(req);
+
+            let cleanData = 'eggs';
+            this.emit('GIT', cleanData);
+
+        }).listen(that.listenPort);
+        
         if(that.proxy) {
             try {
                 var proxysocket = require('proxysocket');
