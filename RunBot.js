@@ -52,7 +52,7 @@ client.on('INVITE', function (data) {
 client.on('CHANMSG', function (data) {
     //pingpong will always be enabled, handy for testing
     if (data.message.match(trigger + 'ping')) {
-        client.say(chan, 'pong')
+        client.say(chan, 'Pong!')
     }
 
     //own commands in this bit, should all be represented in the config file
