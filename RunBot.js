@@ -6,8 +6,6 @@ var url = require('url');
 var config = JSON.parse(fs.readFileSync(path.join(__dirname + '/config.json'), 'utf8'));
 var ircClient = require(path.join(__dirname + '/Libraries/node-irc.js'));
 
-"use strict";
-
 var server = config.IRC.Server;
 var port = config.IRC.Port;
 var myNick = config.IRC.BotName;
@@ -93,11 +91,11 @@ client.on('CHANMSG', function (data) {
             // Open the webpage, get HTML
             var attempts = 0;
             var req = function(requesting_url) {
-                let req_url = url.parse(requesting_url);
-                let port = req_url.protocol == 'https:' ? https : http; // Decides wether not to use the http or https packages
+                var req_url = url.parse(requesting_url);
+                var port = req_url.protocol == 'https:' ? https : http; // Decides wether not to use the http or https packages
                 
-                let req_get = port.request({host: req_url.host, path: req_url.path}, function (res) {
-                    let content = "";
+                var req_get = port.request({host: req_url.host, path: req_url.path}, function (res) {
+                    var content = "";
                     res.setEncoding("utf8");
 
                     if (res.statusCode == 301) { // Follow redirects Todo: Add redirect limitation to stop bot going in endless loops.
