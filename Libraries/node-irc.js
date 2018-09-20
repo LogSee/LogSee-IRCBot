@@ -28,7 +28,7 @@
         var client;
 
         // Ram a http server down its throat for incoming data
-        console.log(that.listenPort);
+        console.log('Listening for data on port', that.listenPort);
         http.createServer(function(req, res) {
             console.log('Got request');
 
