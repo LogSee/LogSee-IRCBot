@@ -13,7 +13,7 @@ var fullname = config.IRC.RealName;
 var chan = config.IRC.Channel;
 var greetmsg = config.IRC.GreetMsg;
 var trigger = config.IRC.TriggerChar;
-var httpregex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi; // What about http:// ?
+var httpregex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
 
 
 var client = new ircClient(server, port, myNick, fullname);
@@ -66,6 +66,13 @@ client.on('CHANMSG', function (data) {
         }
     };
 
+    // Thank the bot, a useless features by P0pzi <3
+    if (data.message.match(trigger + 'thank')) {
+        //if (config.Modules.Thank) {
+            client.say(chan, `You\'re welcome ${data.sender}`);
+        //}
+    };
+
     // Fetches web page title element
     if (data.message.match(httpregex)) {
         if (config.Modules.HttpTitleFetcher) {
@@ -73,15 +80,15 @@ client.on('CHANMSG', function (data) {
             var attempts = 0;
             var req = function(requesting_url) {
                 let req_url = url.parse(requesting_url);
-                let port = req_url.protocol == 'https:' ? https : http;
+                let port = req_url.protocol == 'https:' ? https : http; // Decides wether not to use the http or https packages
                 
                 let req_get = port.request({host: req_url.host, path: req_url.path}, function (res) {
                     let content = "";
                     res.setEncoding("utf8");
 
                     if (res.statusCode == 301) { // Follow redirects Todo: Add redirect limitation to stop bot going in endless loops.
-                        if (attempts > 3) {
-                            req_get.end();
+                        if (attempts > 4) {
+                            req_get.abort();
                             client.say(chan, `^^^ Nice redirection loop you have there ${data.sender} ^^^`);
                         } else {
                             attempts ++;
