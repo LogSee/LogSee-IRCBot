@@ -123,7 +123,7 @@ client.on('CHANMSG', function (data) {
                                 client.say(chan, `^^^ ${title} ^^^`);
                             }
                         } else if (res.headers['content-type'].includes('image/')) { // Is an image or some weird stuff.
-                            client.say(chan, `^^^ Direct Image - ${res.socket.servername} (${res.socket._httpMessage.path.substr(1)}) ^^^`)
+                            client.say(chan, `^^^ Direct Image - ${res.socket._host} (${res.socket._httpMessage.path.substr(1)}) ^^^`)
                         };
                     });
                 });
