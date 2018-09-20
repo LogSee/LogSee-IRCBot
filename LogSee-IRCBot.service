@@ -1,0 +1,13 @@
+[Unit]
+Description=LogSee IRC Bot
+Documentation=https://github.com/LogSee/LogSee-IRCBot
+After=network.target
+
+[Service]
+Type=simple
+User=logsee
+ExecStart=/usr/bin/node /home/logsee/LogSee-IRCBot/RunBot.js
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
