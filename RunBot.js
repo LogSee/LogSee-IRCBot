@@ -93,7 +93,19 @@ client.on('CHANMSG', function (data) {
             var req = function(requesting_url) {
                 var req_url = url.parse(requesting_url);
                 var port = req_url.protocol == 'https:' ? https : http; // Decides wether not to use the http or https packages
-                
+                var completed = false;
+    
+                // Check if we've managed to output a title after x ms, else abort it due to taking too long.
+                (function launchinsec() {
+                    setTimeout(function() {
+                        if (!completed) {
+                            if (req_get) req_get.abort();
+                            client.say(chan, "^^^ URL took too long to resolve. ^^^");
+                            completed = true;
+                        };
+                    }, 1500);
+                })();
+
                 var req_get = port.request({host: req_url.host, path: req_url.path}, function (res) {
                     var content = "";
                     res.setEncoding("utf8");
@@ -104,10 +116,10 @@ client.on('CHANMSG', function (data) {
                             client.say(chan, `^^^ Nice redirection loop you have there ${data.sender} ^^^`);
                         } else {
                             attempts ++;
-                            console.log('Redirecting...');
+                            console.log('Redirecting to', res.headers.location);
                             req_get.abort();
                             req(res.headers.location);
-                        }
+                        };
                     };
 
                     res.on("data", function (chunk) {
@@ -115,21 +127,34 @@ client.on('CHANMSG', function (data) {
                     });
 
                     res.on("end", function () {
-                        //console.log(content);
-                        if (res.headers['content-type'].includes('text/html')) {
+                        // If it's a terribly made website and has no headers, assume it's text/html
+                        if (!res.headers['content-type']){
+                            res.headers['content-type'] = 'text/html';
+                        };
+                        if (res.headers['content-type'].includes('text/html') || res.headers['content-type'].includes('text/css')) {
                             if (content.includes('<title>')) {
-                                var reggy = /<title>(.*)<\/title>/g
-                                var title = reggy.exec(content)[1];
+                                var reggy = /<title>(.+?)<\/title>/gms
+                                var title = reggy.exec(content)[1].replace(/(\r\n\t|\n|\r\t)/gms,"").trim(); // SANITIZE IT
+                                console.log(title);
                                 client.say(chan, `^^^ ${title} ^^^`);
+                            } else {
+                                client.say(chan, `^^^ No title found ^^^`);
                             }
                         } else if (res.headers['content-type'].includes('image/')) { // Is an image or some weird stuff.
                             client.say(chan, `^^^ Direct Image - ${res.socket._host} (${res.socket._httpMessage.path.substr(1)}) ^^^`)
                         };
+                        completed = true;
                     });
+                });
+                req_get.on("error", function(err) {
+                    console.log(err.code, err.host)
+                    if (err.code != 'ENOTFOUND') {
+                        client.say(chan, `Damnit, ${data.sender} managed to break me... THANKS ${data.sender.toUpperCase()}! Can one of my masters pls check my logs? :(`)
+                    };
                 });
                 req_get.end();
             };
-            req(data.message);
+            req(httpregex.exec(data.message)[0]);
         };
     };
 });
