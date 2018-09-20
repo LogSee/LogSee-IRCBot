@@ -66,11 +66,23 @@ client.on('CHANMSG', function (data) {
         }
     };
 
+    // Say Hello! a useless features by P0pzi <3
+    if (data.message.match(new RegExp([trigger + 'hello', trigger + 'hello!', trigger + 'hey', trigger + 'hey!', trigger + 'hi', trigger + 'hi!'].join("|")))) {
+        client.say(chan, `Hello ${data.sender}! \\ (•◡•) /`)
+    };
+
     // Thank the bot, a useless features by P0pzi <3
-    if (data.message.match(trigger + 'thank')) {
-        //if (config.Modules.Thank) {
-            client.say(chan, `You\'re welcome ${data.sender}`);
-        //}
+    if (data.message.toLowerCase().match(new RegExp([trigger + 'thank', trigger + 'thanks', trigger + 'ty'].join("|")))) {
+        client.say(chan, `You\'re welcome ${data.sender} <3`);
+    };
+
+    if (data.message.toLowerCase().match(new RegExp([trigger + 'yolo', trigger + 'swag', trigger + 'yoloswag'].join("|")))) {
+        client.say(chan, `Bad ${data.sender}! °Д°    ┻━┻ ︵ヽ(\`Д´)ﾉ︵ ┻━┻    °Д°`)
+    };
+
+    // DuckDuckGo search
+    if (data.message.toLowerCase().match(new RegExp([trigger + 's', trigger + 'search', trigger + 'google', trigger + 'ddg'].join("|")))) {
+        client.say(chan, 'Searching not yet ready </3');
     };
 
     // Fetches web page title element
@@ -119,7 +131,13 @@ client.on('CHANMSG', function (data) {
 
 // git notification mechanism - popzi
 client.on('GIT', function (data) {
-    client.say(chan, `${data.message.pusher.name} has made a commit - ${data.message.compare}`);
+    // Is it an initial webhook test?
+    console.log('Got GIT:', data);
+    if (data.message.zen == 'Design for failure.') {
+        client.say(chan, `Passed GIT webhook.`);
+    } else {
+        client.say(chan, `${data.message.pusher.name} has made a commit - ${data.message.compare}`);
+    }
 });
 
 // Connect to irc
