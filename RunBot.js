@@ -1,7 +1,6 @@
 var path = require('path');
 var fs = require('fs');
-var http = require('http');
-var https = require('https');
+var request = require('request'); // npm install request
 var url = require('url');
 var config = JSON.parse(fs.readFileSync(path.join(__dirname + '/config.json'), 'utf8'));
 var ircClient = require(path.join(__dirname + '/Libraries/node-irc.js'));
@@ -50,15 +49,16 @@ client.on('INVITE', function (data) {
 });
 
 client.on('CHANMSG', function (data) {
-    //pingpong will always be enabled, handy for testing
-    if (data.message.match(trigger + 'ping')) {
-        client.say(chan, 'Pong!')
-    }
+    var msg = data.message.toLowerCase();
 
-    //own commands in this bit, should all be represented in the config file
+
+    //pingpong will always be enabled, handy for testing
+    if ([`${trigger}ping`].some(x => msg.startsWith(x))) {
+        client.say(chan, 'Pong!')
+    };
 
     //bofh excuse generator
-    if (data.message.match(trigger + 'bofh')) {
+    if ([`${trigger}bofh`].some(x => msg.startsWith(x))) {
         if (config.Modules.BOFH) {
             var bofhexcuse = require('huh');
             var response = bofhexcuse.get('en');
@@ -67,94 +67,79 @@ client.on('CHANMSG', function (data) {
     };
 
     // Say Hello! a useless features by P0pzi <3
-    if (data.message.match(new RegExp([trigger + 'hello', trigger + 'hello!', trigger + 'hey', trigger + 'hey!', trigger + 'hi', trigger + 'hi!'].join("|")))) {
+    if ([`${trigger}hi`, `${trigger}hello`].some(x => msg.startsWith(x))) {
         client.say(chan, `Hello ${data.sender}! \\ (•◡•) /`)
     };
 
     // Thank the bot, a useless features by P0pzi <3
-    if (data.message.toLowerCase().match(new RegExp([trigger + 'thank', trigger + 'thanks', trigger + 'ty'].join("|")))) {
+    if ([`${trigger}ty`, `${trigger}thanks`, `${trigger}thank`].some(x => msg.startsWith(x))) {
         client.say(chan, `You\'re welcome ${data.sender} <3`);
     };
 
-    if (data.message.toLowerCase().match(new RegExp([trigger + 'yolo', trigger + 'swag', trigger + 'yoloswag'].join("|")))) {
+    // Gen-Z killer
+    if ([`${trigger}swag`, `${trigger}yolo`].some(x => msg.startsWith(x))) {
         client.say(chan, `Bad ${data.sender}! °Д°    ┻━┻ ︵ヽ(\`Д´)ﾉ︵ ┻━┻    °Д°`)
     };
 
     // DuckDuckGo search
-    if (data.message.toLowerCase().match(new RegExp([trigger + 's', trigger + 'search', trigger + 'google', trigger + 'ddg'].join("|")))) {
+    if ([`${trigger}s`, `${trigger}search`, `${trigger}google`, `${trigger}ddg`].some(x => msg.startsWith(x))) {
         client.say(chan, 'Searching not yet ready </3');
     };
 
+    if ([`${trigger}goodbot`].some(x => msg.startsWith(x))) {
+        client.say(chan, `I love you ${data.sender} (◕‿◕✿)`);
+    };
+    if ([`${trigger}badbot`].some(x => msg.startsWith(x))) {
+        client.say(chan, `ಠ╭╮ಠ no.`);
+    };
+
     // Fetches web page title element
-    if (data.message.match(httpregex)) {
+    if (data.message.match(httpregex)) { // Screw this bit.
         if (config.Modules.HttpTitleFetcher) {
             // Open the webpage, get HTML
-            var attempts = 0;
-            var req = function(requesting_url) {
-                var req_url = url.parse(requesting_url);
-                var port = req_url.protocol == 'https:' ? https : http; // Decides wether not to use the http or https packages
-                var completed = false;
-    
-                // Check if we've managed to output a title after x ms, else abort it due to taking too long.
-                (function launchinsec() {
-                    setTimeout(function() {
-                        if (!completed) {
-                            if (req_get) req_get.abort();
-                            client.say(chan, "^^^ URL took too long to resolve. ^^^");
-                            completed = true;
-                        };
-                    }, 1500);
-                })();
+            requesting_url = httpregex.exec(data.message)[0];
+            console.log('User requests URL', requesting_url);
 
-                var req_get = port.request({host: req_url.host, path: req_url.path}, function (res) {
-                    var content = "";
-                    res.setEncoding("utf8");
+            request({
+                url: requesting_url
+            }, function(err, response, body) {
 
-                    if (res.statusCode == 301) { // Follow redirects Todo: Add redirect limitation to stop bot going in endless loops.
-                        if (attempts > 4) {
-                            req_get.abort();
-                            client.say(chan, `^^^ Nice redirection loop you have there ${data.sender} ^^^`);
+                if (err) {
+                    console.log('ERROR\n', err);
+                    client.say(chan, `${data.sender} hurt me! :( Can a master please check my logs?`)
+                };
+
+                if (response) {
+                    console.log('Got Response');
+                    console.log(response);
+
+                    if (!response.headers['content-type']) {
+                        console.log('No header content? wtf website?');
+                    };
+
+                    if (response.headers['content-type'] && ['image/png', 'image/jpeg'].some(x => response.headers['content-type'].match(x))) {
+                        console.log('This is an image!');
+
+                        client.say(chan, `^^^ Image hosted on ${response.request.host} (${response.request.path} - ${(response.connection.bytesRead / 1000000).toFixed(2)}MB) ^^^`)
+                    };
+
+                    if (response.headers['content-type'] && ['text/html', 'text/css'].some(x => response.headers['content-type'].match(x))) {
+                        console.log('This is a readable');
+                        var title_regx = /<title>(.+?)<\/title>/gms // Find the first title in the body
+                        var title = title_regx.exec(body); // SANITIZE IT
+                        if (title && title.length >= 1) {
+                            client.say(chan, `^^^ ${title[1].replace(/(\r\n\t|\n|\r\t)/gms,"").trim()} ^^^`);
                         } else {
-                            attempts ++;
-                            console.log('Redirecting to', res.headers.location);
-                            req_get.abort();
-                            req(res.headers.location);
-                        };
+                            client.say(chan, `^^^ ${response.request.host} (${response.request.path} - ${(response.connection.bytesRead / 1000000).toFixed(2)}MB) ^^^`)
+                        }
                     };
 
-                    res.on("data", function (chunk) {
-                        content += chunk;
-                    });
-
-                    res.on("end", function () {
-                        // If it's a terribly made website and has no headers, assume it's text/html
-                        if (!res.headers['content-type']){
-                            res.headers['content-type'] = 'text/html';
-                        };
-                        if (res.headers['content-type'].includes('text/html') || res.headers['content-type'].includes('text/css')) {
-                            if (content.includes('<title>')) {
-                                var reggy = /<title>(.+?)<\/title>/gms
-                                var title = reggy.exec(content)[1].replace(/(\r\n\t|\n|\r\t)/gms,"").trim(); // SANITIZE IT
-                                console.log(title);
-                                client.say(chan, `^^^ ${title} ^^^`);
-                            } else {
-                                client.say(chan, `^^^ No title found ^^^`);
-                            }
-                        } else if (res.headers['content-type'].includes('image/')) { // Is an image or some weird stuff.
-                            client.say(chan, `^^^ Direct Image - ${res.socket._host} (${res.socket._httpMessage.path.substr(1)}) ^^^`)
-                        };
-                        completed = true;
-                    });
-                });
-                req_get.on("error", function(err) {
-                    console.log(err.code, err.host)
-                    if (err.code != 'ENOTFOUND') {
-                        client.say(chan, `Damnit, ${data.sender} managed to break me... THANKS ${data.sender.toUpperCase()}! Can one of my masters pls check my logs? :(`)
+                    if (response.headers['content-type'] && ['text/plain'].some(x => response.headers['content-type'].match(x))) {
+                        console.log('This is plain text');
+                        client.say(chan, `^^^ Raw plain text (${response.connection.bytesRead} Bytes) ^^^`);
                     };
-                });
-                req_get.end();
-            };
-            req(httpregex.exec(data.message)[0]);
+                };
+            });
         };
     };
 });
