@@ -42,7 +42,7 @@
                 res.end();
 
                 // Was it a git message?
-                if (body.includes('git')) {
+                if (body.includes('github.com')) {
                     that.eventHandler({"method": "GIT", "message": JSON.parse(body)});
                 };
             });
