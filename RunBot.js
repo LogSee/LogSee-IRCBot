@@ -136,8 +136,8 @@ client.on('GIT', function (data) {
     if (data.message.zen == 'Design for failure.') {
         client.say(chan, `Passed GIT webhook.`);
     } else {
-        client.say(chan, `${data.message.pusher.name} has made a commit - ${data.message.compare}`);
-    }
+        client.say(chan, `${data.message.pusher.name} has made a commit on project ${data.message.repository.full_name} "${data.message.head_commit.message}" - ${data.message.compare}`);
+    };
 });
 
 // Connect to irc
