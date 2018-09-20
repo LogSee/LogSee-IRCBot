@@ -115,11 +115,16 @@ client.on('CHANMSG', function (data) {
                     });
 
                     res.on("end", function () {
-                        if (content.includes('<title>')) {
-                            var reggy = /<title>(.*)<\/title>/g
-                            var title = reggy.exec(content)[1];
-                            client.say(chan, `^^^ ${title} ^^^`);
-                        }
+                        //console.log(content);
+                        if (res.headers['content-type'].includes('text/html')) {
+                            if (content.includes('<title>')) {
+                                var reggy = /<title>(.*)<\/title>/g
+                                var title = reggy.exec(content)[1];
+                                client.say(chan, `^^^ ${title} ^^^`);
+                            }
+                        } else if (res.headers['content-type'].includes('image/')) { // Is an image or some weird stuff.
+                            client.say(chan, `^^^ Direct Image - ${res.socket.servername} (${res.socket._httpMessage.path.substr(1)}) ^^^`)
+                        };
                     });
                 });
                 req_get.end();
