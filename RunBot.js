@@ -93,8 +93,8 @@ client.on('CHANMSG', function (data) {
     if ([`${trigger}shrug`].some(x => msg.startsWith(x))) {
         client.say(chan, `¯\\_(ツ)_/¯`);
     };
-    if ([`${trigger}bad` + ' Ainsey'].some(x => msg.startsWith(x))) {
-        client.say(chan, `/me is dissapointed in Ainsey. He needs to get his act together`);
+    if ([`${trigger}bad`].some(x => msg.startsWith(x))) {
+        client.say(chan, `/me is dissapointed in ${data.sender}. ${data.sender} needs to get his act together`);
     };
     
     // Fetches web page title element
