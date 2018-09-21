@@ -126,7 +126,7 @@ client.on('CHANMSG', function (data) {
 
                     if (response.headers['content-type'] && ['text/html', 'text/css'].some(x => response.headers['content-type'].match(x))) {
                         console.log('This is a readable');
-                        var title_regx = /<title>(.+?)<\/title>/gms // Find the first title in the body
+                        var title_regx = /<title>(.+?)<\/title>/gms; // Find the first title in the body
                         var title = title_regx.exec(body); // SANITIZE IT
                         if (title && title.length >= 1) {
                             client.say(chan, `^^^ ${title[1].replace(/(\r\n\t|\n|\r\t)/gms,"").trim()} ^^^`);
