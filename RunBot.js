@@ -92,7 +92,13 @@ client.on('CHANMSG', function (data) {
     if ([`${trigger}badbot`].some(x => msg.startsWith(x))) {
         client.say(chan, `ಠ╭╮ಠ no.`);
     };
-
+    if ([`${trigger}dong`].some(x => msg.startsWith(x))) {
+        client.say(chan, `(ง ͠ ͠° ͟ل͜ ͡°)ง NEVER UNDERESTIMATE THE POWER OF THE DONG (ง ͠ ͠° ͟ل͜ ͡°)ง`);
+    };
+    if ([`${trigger}shrug`].some(x => msg.startsWith(x))) {
+        client.say(chan, `¯\_(ツ)_/¯`);
+    };
+    
     // Fetches web page title element
     if (data.message.match(httpregex)) { // Screw this bit.
         if (config.Modules.HttpTitleFetcher) {
@@ -111,7 +117,7 @@ client.on('CHANMSG', function (data) {
 
                 if (response) {
                     console.log('Got Response');
-                    console.log(response);
+                    //console.log(response);
 
                     if (!response.headers['content-type']) {
                         console.log('No header content? wtf website?');
