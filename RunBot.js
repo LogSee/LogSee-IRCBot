@@ -96,7 +96,12 @@ client.on('CHANMSG', function (data) {
     if ([`${trigger}stupid`].some(x => msg.startsWith(x))) {
         client.say(chan, `GODAMMIT, YOU'RE SO STUPID. HOW ARE YOU EVEN ALLOWED TO CODE!`);
     };
-    
+    if ([`${trigger}search`].some(x => msg.startsWith(x))) {
+        var ddg = require('ddg');
+        query = data.message;
+        result = ddg.query(query, displayResult);
+        client.say(chan, result);
+    };
     // Fetches web page title element
     if (data.message.match(httpregex)) { // Screw this bit.
         if (config.Modules.HttpTitleFetcher) {
