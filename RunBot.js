@@ -96,7 +96,7 @@ client.on('CHANMSG', function (data) {
         client.say(chan, `(ง ͠ ͠° ͟ل͜ ͡°)ง NEVER UNDERESTIMATE THE POWER OF THE DONG (ง ͠ ͠° ͟ل͜ ͡°)ง`);
     };
     if ([`${trigger}shrug`].some(x => msg.startsWith(x))) {
-        client.say(chan, `¯\_(ツ)_/¯`);
+        client.say(chan, `¯\\_(ツ)_/¯`);
     };
     
     // Fetches web page title element
