@@ -96,19 +96,8 @@ client.on('CHANMSG', function (data) {
     if ([`${trigger}stupid`].some(x => msg.startsWith(x))) {
         client.say(chan, `GODAMMIT, YOU'RE SO STUPID. HOW ARE YOU EVEN ALLOWED TO CODE!`);
     };
-    if ([`${trigger}search`].some(x => msg.startsWith(x))) {
-        var ddg = require('ddg');
-        query = data.message;
-        result = ddg.query(query, displayResult);
-        function displayResult(err, data) {
-            if(err) return ziggy.say(channel, 'Not right now, ask later.');
-            var result = data.AbstractText ||
-            removeDef(data.Definition) ||
-            (data.RelatedTopics && data.RelatedTopics.length &&
-            data.RelatedTopics[0].Text) ||
-            notFound[Math.floor(Math.random() * notFound.length)];
-            client.say(chan, result);
-            }
+    if ([`${trigger}ddg`].some(x => msg.startsWith(x))) {
+        
     };
     // Fetches web page title element
     if (data.message.match(httpregex)) { // Screw this bit.
