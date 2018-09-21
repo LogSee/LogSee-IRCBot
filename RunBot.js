@@ -92,9 +92,6 @@ client.on('CHANMSG', function (data) {
     if ([`${trigger}badbot`].some(x => msg.startsWith(x))) {
         client.say(chan, `ಠ╭╮ಠ no.`);
     };
-    if ([`${trigger}potato`].some(x => msg.startsWith(x))) {
-        client.say(chan, `https://www.youtube.com/watch?v=BzDORfcG1VQ`);
-    };
 
     // Fetches web page title element
     if (data.message.match(httpregex)) { // Screw this bit.
