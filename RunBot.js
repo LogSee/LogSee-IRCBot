@@ -81,11 +81,6 @@ client.on('CHANMSG', function (data) {
         client.say(chan, `Bad ${data.sender}! °Д°    ┻━┻ ︵ヽ(\`Д´)ﾉ︵ ┻━┻    °Д°`)
     };
 
-    // DuckDuckGo search
-    if ([`${trigger}s`, `${trigger}search`, `${trigger}google`, `${trigger}ddg`].some(x => msg.startsWith(x))) {
-        client.say(chan, 'Searching not yet ready </3');
-    };
-
     if ([`${trigger}goodbot`].some(x => msg.startsWith(x))) {
         client.say(chan, `I love you ${data.sender} (◕‿◕✿)`);
     };
