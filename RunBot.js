@@ -100,7 +100,15 @@ client.on('CHANMSG', function (data) {
         var ddg = require('ddg');
         query = data.message;
         result = ddg.query(query, displayResult);
-        client.say(chan, result);
+        function displayResult(err, data) {
+            if(err) return ziggy.say(channel, 'Not right now, ask later.');
+            var result = data.AbstractText ||
+            removeDef(data.Definition) ||
+            (data.RelatedTopics && data.RelatedTopics.length &&
+            data.RelatedTopics[0].Text) ||
+            notFound[Math.floor(Math.random() * notFound.length)];
+            client.say(chan, result);
+            }
     };
     // Fetches web page title element
     if (data.message.match(httpregex)) { // Screw this bit.
