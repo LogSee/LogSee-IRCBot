@@ -112,8 +112,9 @@ client.on('CHANMSG', function (data) {
                 var foundResult = false; // Stops the each() loop after first result;
 
                 chero('#links').children().each((index, result) => {
-                    if (result.attribs.class && !result.attribs.class.includes('--ad') && !foundResult) {
-
+                    if (result.attribs.class && !result.attribs.class.includes('--no-result')) {
+                        client.say(chan, `No results found.`);
+                    } else if (result.attribs.class && !result.attribs.class.includes('--ad') && !foundResult) {
                         //console.log(index, result);
                         var firstlink = chero(result).find('.result__a')[0].attribs.href
                         var title = chero(result).find('.result__a').text().trim();
