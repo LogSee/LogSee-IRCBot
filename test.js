@@ -6,7 +6,7 @@ var headers = {
  }
 
 
- var url = "https://duckduckgo.com/html?q=vim";
+ var url = "https://duckduckgo.com/html?q=vim+dog";
  
  request.post({url:url, headers: headers}, function(error, response, html){
     if (html) {
@@ -18,11 +18,11 @@ var headers = {
 
                 //console.log(index, result);
                 var firstlink = chero(result).find('.result__a')[0].attribs.href
-                console.log(firstlink);
+                var title = chero(result).find('.result__a').text().trim();
+                console.log(title, firstlink);
 
                 foundResult = true;
             }
         })
     }
-
  });
