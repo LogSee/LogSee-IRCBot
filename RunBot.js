@@ -2,6 +2,7 @@ var path = require('path');
 var fs = require('fs');
 var request = require('request'); // npm install request
 var url = require('url');
+var cheerio = require('cheerio'); // npm install cheerio
 var config = JSON.parse(fs.readFileSync(path.join(__dirname + '/config.json'), 'utf8'));
 var ircClient = require(path.join(__dirname + '/Libraries/node-irc.js'));
 
@@ -97,14 +98,12 @@ client.on('CHANMSG', function (data) {
         client.say(chan, `GODAMMIT, YOU'RE SO STUPID. HOW ARE YOU EVEN ALLOWED TO CODE!`);
     };
     if ([`${trigger}ddg`].some(x => msg.startsWith(x))) {
-        var request = require('request');
-        var cheerio = require('cheerio');
         var headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:62.0) Gecko/20100101 Firefox/62.0',
             'Content-Type' : 'application/x-www-form-urlencoded'
         }
         var messageconcat = data.message.replace(' ','+');
-        var url = "https://duckduckgo.com/html?q="+messageconcat;
+        var url = `https://duckduckgo.com/html?q=${messageconcat}`;
  
         request.post({url:url, headers: headers}, function(error, response, html){
             if (html) {
@@ -112,18 +111,18 @@ client.on('CHANMSG', function (data) {
                 var foundResult = false; // Stops the each() loop after first result;
 
                 chero('#links').children().each((index, result) => {
-                if (result.attribs.class && !result.attribs.class.includes('--ad') && !foundResult) {
+                    if (result.attribs.class && !result.attribs.class.includes('--ad') && !foundResult) {
 
-                //console.log(index, result);
-                var firstlink = chero(result).find('.result__a')[0].attribs.href
-                var title = chero(result).find('.result__a').text().trim();
-                console.log(title, firstlink);
-                client.say(chan, title +' ' + firstlink);
-                foundResult = true;
-            }
-        })
-    }
- });
+                        //console.log(index, result);
+                        var firstlink = chero(result).find('.result__a')[0].attribs.href
+                        var title = chero(result).find('.result__a').text().trim();
+                        //console.log(title, firstlink);
+                        client.say(chan, title +' ' + firstlink);
+                        foundResult = true;
+                    };
+                });
+            };
+        });
     };
     // Fetches web page title element
     if (data.message.match(httpregex)) { // Screw this bit.
