@@ -97,6 +97,19 @@ client.on('CHANMSG', function (data) {
     if ([`${trigger}stupid`].some(x => msg.startsWith(x))) {
         client.say(chan, `GODAMMIT, YOU'RE SO STUPID. HOW ARE YOU EVEN ALLOWED TO CODE!`);
     };
+    if ([`${trigger}yt`].some(x => msg.startsWith(x))) {
+        var search = require('youtube-search');
+        var opts = {
+            maxResults: 1,
+            key: config.Youtube.Key
+          };
+        var query = data.message;
+        search(query, opts, function(err, results) {
+            if(err) return console.log(err);
+            console.dir(results);
+            client.say(chan, results);
+        });
+    };
     if ([`${trigger}ddg`].some(x => msg.startsWith(x))) {
         console.log('DDG FIRED');
         var headers = {
