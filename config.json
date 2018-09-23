@@ -2,9 +2,9 @@
     "IRC": {
         "Server" : "irc.freenode.net",
         "Port" : "6667",
-        "BotName" : "LogSeeBotTest",
-        "RealName" : "LogSeeBotTest",
-        "Channel" : "#logsee-dev",
+        "BotName" : "LogSeeBot",
+        "RealName" : "LogSeeBot",
+        "Channel" : "#logsee",
         "GreetMsg" : "Hello, it's your friendly neighborhood bot!",
         "TriggerChar" : "!"
     },
