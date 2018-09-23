@@ -107,7 +107,7 @@ client.on('CHANMSG', function (data) {
         search(query, opts, function(err, results) {
             if(err) return console.log(err);
             console.dir(results);
-            client.say(chan, results[0].link);
+            client.say(chan, results[0].title + ' ' + results[0].link + 'By: ' + results[0].channelTitle) ;
         });
     };
     if ([`${trigger}ddg`].some(x => msg.startsWith(x))) {
