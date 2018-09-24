@@ -100,8 +100,12 @@ client.on('CHANMSG', function (data) {
     if ([`${trigger}ud`].some(x => msg.startsWith(x))) {
         var request = require('request');
         var concat = data.message.replace(' ','+');
-        response = request('http://api.urbandictionary.com/v0/define?term='+concat);
-        client.say(chan, response[0].defenition);
+        var url = `http://api.urbandictionary.com/v0/define?term=${concat}`;
+        request(url, function (error, response, body) {
+            if (!error) {
+                client.say(chan, (JSON.parse(response.body).list[0].definition));
+            }
+        });
     };
 
     if ([`${trigger}yt`].some(x => msg.startsWith(x))) {
