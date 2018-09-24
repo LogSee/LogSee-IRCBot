@@ -162,7 +162,7 @@ client.on('CHANMSG', function (data) {
             // Open the webpage, get HTML
             requesting_url = httpregex.exec(data.message)[0];
             console.log('User requests URL', requesting_url);
-
+            var request = require('request');
             request({
                 url: requesting_url
             }, function(err, response, body) {
