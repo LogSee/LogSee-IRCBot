@@ -99,8 +99,8 @@ client.on('CHANMSG', function (data) {
     };
     if ([`${trigger}ud`].some(x => msg.startsWith(x))) {
         var request = require('request');
-        var concat = concat.replace('!ud ','');
-        var concat2 = data.message.replace(' ','+');
+        var concat = data.message.replace('!ud ','');
+        var concat2 = concat.replace(' ','+');
         
         var url = `http://api.urbandictionary.com/v0/define?term=${concat2}`;
         console.log(url);
