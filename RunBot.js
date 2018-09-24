@@ -101,6 +101,7 @@ client.on('CHANMSG', function (data) {
         var request = require('request');
         var concat = data.message.replace(' ','+');
         var url = `http://api.urbandictionary.com/v0/define?term=${concat}`;
+        console.log(url);
         request(url, function (error, response, body) {
             if (!error) {
                 client.say(chan, (JSON.parse(response.body).list[0].definition));
