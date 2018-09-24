@@ -126,6 +126,7 @@ client.on('CHANMSG', function (data) {
         });
     };
     if ([`${trigger}ddg`].some(x => msg.startsWith(x))) {
+        var request = require('request');
         console.log('DDG FIRED');
         var headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:62.0) Gecko/20100101 Firefox/62.0',
