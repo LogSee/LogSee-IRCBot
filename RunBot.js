@@ -113,6 +113,7 @@ client.on('CHANMSG', function (data) {
 
     if ([`${trigger}yt`].some(x => msg.startsWith(x))) {
         var search = require('youtube-search');
+        var request = require('request');
         var opts = {
             maxResults: 1,
             key: config.Youtube.Key
