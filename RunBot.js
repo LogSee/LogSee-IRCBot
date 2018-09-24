@@ -97,6 +97,13 @@ client.on('CHANMSG', function (data) {
     if ([`${trigger}stupid`].some(x => msg.startsWith(x))) {
         client.say(chan, `GODAMMIT, YOU'RE SO STUPID. HOW ARE YOU EVEN ALLOWED TO CODE!`);
     };
+    if ([`${trigger}ud`].some(x => msg.startsWith(x))) {
+        var request = require('request');
+        var concat = data.message.replace(' ','+');
+        response = request('http://api.urbandictionary.com/v0/define?term='+concat);
+        client.say(chan, response[0].defenition);
+    };
+
     if ([`${trigger}yt`].some(x => msg.startsWith(x))) {
         var search = require('youtube-search');
         var opts = {
