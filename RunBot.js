@@ -82,7 +82,7 @@ client.on('CHANMSG', function (data) {
         client.say(chan, `Bad ${data.sender}! °Д°    ┻━┻ ︵ヽ(\`Д´)ﾉ︵ ┻━┻    °Д°`)
     };
     if ([`${trigger}porridge`].some(x => msg.startsWith(x))) {
-        client.say(chan, ` (◕‿◕✿)`);
+        client.say(chan, ` LogSee Bot Loves porridge ⊂(◉‿◉)つ`);
     };
 
     if ([`${trigger}goodbot`].some(x => msg.startsWith(x))) {
