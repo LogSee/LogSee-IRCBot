@@ -13,10 +13,14 @@ var fullname = config.IRC.RealName;
 var chan = config.IRC.Channel;
 var greetmsg = config.IRC.GreetMsg;
 var trigger = config.IRC.TriggerChar;
+var autoRejoin = config.IRC.autoRejoin;
+var retryCount = config.IRC.retryCount;
+var MessageSplit = config.IRC.MessageSplit;
+var retryDelay = config.IRC.retryDelay;
 var httpregex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
 
 
-var client = new ircClient(server, port, myNick, fullname);
+var client = new ircClient(server, port, myNick, fullname, autoRejoin,retryCount,MessageSplit,retryDelay);
 client.verbosity = 2;
 client.debug = false;
 
