@@ -6,7 +6,11 @@
         "RealName" : "LogSeeBot",
         "Channel" : "#logsee",
         "GreetMsg" : "Hello, it's your friendly neighborhood bot!",
-        "TriggerChar" : "!"
+        "TriggerChar" : "!",
+        "MessageSplit" : 512,
+        "retryCount": 0,
+        "retryDelay": 2000,
+        "autoRejoin" : true
     },
     "Modules": {
         "BOFH" : true,

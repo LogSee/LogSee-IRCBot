@@ -27,7 +27,6 @@ client.debug = false;
 client.on('ready', function () {
     client.join(chan);
 });
-
 // Handy to see if the config options have been read correctly.
 console.log("Connecting to: " + server);
 console.log("On port: " + port);
