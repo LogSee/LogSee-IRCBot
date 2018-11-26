@@ -6,6 +6,7 @@ var cheerio = require('cheerio'); // npm install cheerio
 var config = JSON.parse(fs.readFileSync(path.join(__dirname + '/config.json'), 'utf8'));
 var ircClient = require(path.join(__dirname + '/Libraries/node-irc.js'));
 
+
 var server = config.IRC.Server;
 var port = config.IRC.Port;
 var myNick = config.IRC.BotName;
