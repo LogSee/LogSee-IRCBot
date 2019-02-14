@@ -61,6 +61,9 @@ client.on('CHANMSG', function (data) {
     if ([`${trigger}ping`].some(x => msg.startsWith(x))) {
         client.say(chan, 'Pong!')
     };
+    if ([`${trigger}help`].some(x => msg.startsWith(x))) {
+        client.say(chan, 'Commands Available: bofh, hi, ty, swag, porridge, goodbot, badbot, dong, shrug, stupid, ud, yt, ddg')
+    };
 
     //bofh excuse generator
     if ([`${trigger}bofh`].some(x => msg.startsWith(x))) {
